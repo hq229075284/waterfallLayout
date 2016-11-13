@@ -8,10 +8,11 @@ var option = {
 };
 
 var recordMaxHeightForEveryColumn = new Array(option.columns);
+for (var i = 0; i < recordMaxHeightForEveryColumn.length; i++) {
+	recordMaxHeightForEveryColumn[i] = 0;
+}
+
 function initConstructPositionFunction() {
-	for (var i = 0; i < recordMaxHeightForEveryColumn.length; i++) {
-		recordMaxHeightForEveryColumn[i] = 0;
-	}
 	return function(ratio) {
 		// if(iscomplete){
 		// 	return recordMaxHeightForEveryColumn;
@@ -99,13 +100,16 @@ function translateUnit(value) {
 function readerDom() {
 	var getPosition = initConstructPositionFunction();
 	var div, img, url, ratio, position, customization;
+	var assetArr=[];
 	return function(asset) {
+		asset=$.extend(true, [] ,asset);
 		for (var i = 0; i < asset.length; i++) {
 			url = asset[i].url;
 			ratio = asset[i].ratio;
 			position = getPosition(ratio);
 			// 创建元素并渲染DOM
 			div = document.createElement("div");
+			asset[i].el=div;
 			div.style.position = "absolute";
 			div.style.left = position.left + "px";
 			div.style.top = position.top + "px";
@@ -120,9 +124,11 @@ function readerDom() {
 			div.appendChild(customization);
 			document.getElementsByClassName("imageContainer")[0].appendChild(div);
 		}
+		assetArr=assetArr.concat(asset);
+		return assetArr;
 	};
 }
-var readerDonBy=readerDom();
+var readerDonBy = readerDom();
 readerDonBy(imageAssemble);
 readerDonBy(imageAssemble);
 readerDonBy(imageAssemble);
@@ -132,11 +138,47 @@ readerDonBy(imageAssemble);
 readerDonBy(imageAssemble);
 readerDonBy(imageAssemble);
 readerDonBy(imageAssemble);
-readerDonBy(imageAssemble);
-var max=recordMaxHeightForEveryColumn[0];
-for(var i=0;i<recordMaxHeightForEveryColumn.length;i++){
-	if(recordMaxHeightForEveryColumn[i]>=max){
-		max=recordMaxHeightForEveryColumn[i];
+var assetArr=readerDonBy(imageAssemble);
+var max = recordMaxHeightForEveryColumn[0];
+for (var i = 0; i < recordMaxHeightForEveryColumn.length; i++) {
+	if (recordMaxHeightForEveryColumn[i] >= max) {
+		max = recordMaxHeightForEveryColumn[i];
 	}
 }
-document.getElementsByClassName('imageContainer')[0].style.height=max+"px";
+document.getElementsByClassName('imageContainer')[0].style.height = max + "px";
+var timer;
+window.onresize = function() {
+	clearTimeout(timer);
+	timer = setTimeout(function() {
+		if(document.documentElement.offsetWidth<700)
+			option.columns = 3;
+		else
+			option.columns = 4;
+		recordMaxHeightForEveryColumn = new Array(option.columns);
+		for (var i = 0; i < recordMaxHeightForEveryColumn.length; i++) {
+			recordMaxHeightForEveryColumn[i] = 0;
+		}
+		modifyPosition(assetArr);
+		var max = recordMaxHeightForEveryColumn[0];
+		for (var i = 0; i < recordMaxHeightForEveryColumn.length; i++) {
+			if (recordMaxHeightForEveryColumn[i] >= max) {
+				max = recordMaxHeightForEveryColumn[i];
+			}
+		}
+		document.getElementsByClassName('imageContainer')[0].style.height = max + "px";
+	}, 500);
+};
+function modifyPosition(assetArr){
+	var getPosition = initConstructPositionFunction();
+	var el,ratio,position;
+	for(var i=0;i<assetArr.length;i++){
+		el=assetArr[i].el;
+		ratio = assetArr[i].ratio;
+		position = getPosition(ratio);
+		el.style.left=position.left+"px";
+		el.style.top=position.top+"px";
+		el.style.height=position.containerHeight+"px";
+		el.style.width=position.containerWidth+"px";
+		el.childNodes[0].style.height=position.imgHeight+"px";
+	}
+}

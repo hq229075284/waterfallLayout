@@ -6,9 +6,17 @@ img{
 .imageContainer{
 	position: relative;
 	/* height: 1000px; */
-	width: 1423px;
+	/* width: 1423px; */
+	/* background-color: #000; */
 }
 .imageContainer>div{
 	box-sizing: border-box;
 	background-color: #ddd;
+	-webkit-animation: show 1s linear .1s both;
+	transition:all 1s linear;
+	/* display: none; */
+}
+@-webkit-keyframes show{
+	0%{opacity: 0;transform: translate(0, 40px);}
+	100%{opacity: 1;}
 }
