@@ -1,0 +1,14 @@
+img{
+	width: 100%;
+	/* box-sizing: border-box; */
+	overflow: hidden;
+}
+.imageContainer{
+	position: relative;
+	/* height: 1000px; */
+	width: 1423px;
+}
+.imageContainer>div{
+	box-sizing: border-box;
+	background-color: #ddd;
+}

@@ -1,0 +1,25 @@
+var imageAssemble = [{
+    "url": "asset/1.jpg",
+    "ratio": 364/550
+}, {
+    "url": "asset/2.jpg",
+    "ratio": 563/900
+}, {
+    "url": "asset/3.jpg",
+    "ratio": 613/900
+}, {
+    "url": "asset/4.jpg",
+    "ratio": 389/580
+}, {
+    "url": "asset/5.jpg",
+    "ratio": 576/1024
+}, {
+    "url": "asset/6.jpg",
+    "ratio": 500/750
+}, {
+    "url": "asset/7.jpg",
+    "ratio": 646/950
+}, {
+    "url": "asset/8.jpg",
+    "ratio": 667/1000
+}];
